@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>高二英文 U1 單字精熟挑戰 | 英文單字五關精熟挑戰</title>
+  <style>
+    :root {
+      --primary: #4F46E5;
+      --primary-hover: #4338CA;
+      --primary-light: #EEF2FF;
+      --accent: #F59E0B;
+      --accent-light: #FEF3C7;
+      --success: #10B981;
+      --success-light: #D1FAE5;
+      --danger: #EF4444;
+      --danger-light: #FEE2E2;
+      --purple: #8B5CF6;
+      --purple-light: #EDE9FE;
+      --bg: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text-main: #1E293B;
+      --text-muted: #64748B;
+      --border: #E2E8F0;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.12);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: linear-gradient(135deg, #F0F4FF 0%, #FAF5FF 50%, #F0FDF4 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 12px 40px;
+      line-height: 1.5;
+    }
+
+    /* 頂部導航與進度列 */
+    header {
+      width: 100%;
+      max-width: 860px;
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .header-title-group h1 {
+      font-size: 21px;
+      font-weight: 800;
+      color: #1E1B4B;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-title-group p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .header-badges {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .badge-pill {
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid rgba(79, 70, 229, 0.15);
+      cursor: default;
+    }
+
+    .badge-pill.btn-pill {
+      cursor: pointer;
+      background: #FFFFFF;
+      transition: all 0.2s;
+    }
+    .badge-pill.btn-pill:hover {
+      background: var(--primary-light);
+      transform: translateY(-1px);
+    }
+
+    .badge-pill.score {
+      background: var(--accent-light);
+      color: #B45309;
+      border-color: rgba(245, 158, 11, 0.25);
+    }
+
+    /* 主容器 */
+    .container {
+      width: 100%;
+      max-width: 860px;
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+      padding: 28px 24px;
+      position: relative;
+    }
+
+    /* 關卡切換導航標籤 */
+    .level-nav-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 24px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scrollbar-width: none;
+    }
+    .level-nav-bar::-webkit-scrollbar { display: none; }
+
+    .nav-step {
+      flex: 1;
+      min-width: 120px;
+      padding: 10px 8px;
+      border-radius: var(--radius-md);
+      background: #F1F5F9;
+      color: var(--text-muted);
+      text-align: center;
+      font-size: 12.5px;
+      font-weight: 700;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+      user-select: none;
+    }
+    .nav-step.active {
+      background: var(--primary);
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+    .nav-step.completed {
+      background: var(--success-light);
+      color: #065F46;
+      border-color: rgba(16, 185, 129, 0.25);
+    }
+
+    /* 頁面切換 */
+    .page { display: none; }
+    .page.active { display: block; animation: fadeIn 0.3s ease-out; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 關卡標題區 */
+    .level-header {
+      background: linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 100%);
+      padding: 18px 20px;
+      border-radius: var(--radius-md);
+      border-left: 5px solid var(--primary);
+      margin-bottom: 24px;
+    }
+    .level-header h2 {
+      font-size: 18px;
+      font-weight: 800;
+      color: #1E1B4B;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .level-header p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+    .level-header .pts-badge {
+      font-size: 12px;
+      background: #FFFFFF;
+      color: var(--primary);
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* 題目卡片 */
+    .question-card {
+      background: #FFFFFF;
+      border: 1.5px solid #E2E8F0;
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      transition: all 0.2s;
+    }
+    .question-card:hover {
+      border-color: #CBD5E1;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .q-index {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 2px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .q-prompt {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    .q-prompt .highlight {
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .action-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    /* 按鈕樣式 */
+    button {
+      font-size: 14.5px;
+      font-weight: 600;
+      padding: 9px 18px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.18s;
+      user-select: none;
+    }
+    button:active { transform: scale(0.97); }
+
+    .play-btn {
+      background: #10B981;
+      color: white;
+    }
+    .play-btn:hover { background: #059669; }
+
+    .record-btn {
+      background: #EF4444;
+      color: white;
+    }
+    .record-btn:hover { background: #DC2626; }
+    .record-btn.recording {
+      background: #B91C1C;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+      70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+
+    .next-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
+      color: white;
+      padding: 14px 20px;
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      font-weight: 700;
+      justify-content: center;
+      margin-top: 24px;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+    }
+    .next-btn:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    /* 選單與輸入框 */
+    select, input[type="text"] {
+      width: 100%;
+      max-width: 460px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid #CBD5E1;
+      font-size: 15px;
+      color: var(--text-main);
+      background-color: #FFFFFF;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    select:focus, input[type="text"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+    }
+
+    /* 語音狀態與回饋 */
+    .speech-status {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      padding: 5px 10px;
+      border-radius: 6px;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+    }
+    .speech-status.active-listen {
+      color: #DC2626;
+      background: var(--danger-light);
+      border-color: #FCA5A5;
+    }
+
+    .hearts {
+      font-size: 18px;
+      letter-spacing: 2px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* 結算頁面 */
+    .result-card {
+      text-align: center;
+      padding: 20px 10px;
+    }
+    .result-badge-icon {
+      font-size: 64px;
+      margin-bottom: 12px;
+      display: inline-block;
+      animation: bounce 1s infinite alternate;
+    }
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-8px); }
+    }
+
+    .result-score-title {
+      font-size: 32px;
+      font-weight: 900;
+      color: #1E1B4B;
+      margin-bottom: 6px;
+    }
+    .result-score-highlight {
+      color: var(--primary);
+      font-size: 42px;
+    }
+    .result-comment {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      font-weight: 500;
+    }
+
+    .score-breakdown-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+      text-align: left;
+    }
+
+    .score-box {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .score-box-title {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .score-box-num {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .restart-btn {
+      background: #059669;
+      color: white;
+      padding: 12px 28px;
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 6px;
+    }
+    .restart-btn:hover { background: #047857; }
+
+    /* 麥克風提示 */
+    .mic-warning {
+      background: #FFFBEB;
+      border: 1px solid #FDE68A;
+      color: #B45309;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* 單字列表彈窗 Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-content {
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      max-width: 800px;
+      width: 100%;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+    .modal-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: #1E1B4B;
+    }
+    .modal-close {
+      background: #F1F5F9;
+      border: none;
+      font-size: 16px;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .modal-body {
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .word-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .word-table th, .word-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .word-table th {
+      background: #F8FAFC;
+      color: var(--text-muted);
+      font-weight: 700;
+      position: sticky;
+      top: 0;
+    }
+    .word-table tr:hover {
+      background: #F8FAFC;
+    }
+
+    /* 響應式調整 */
+    @media (max-width: 600px) {
+      .container { padding: 20px 14px; }
+      .header-title-group h1 { font-size: 18px; }
+      .level-header h2 { font-size: 16px; }
+      .q-prompt { font-size: 15px; }
+      .score-breakdown-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部資訊列 -->
+  <header>
+    <div class="header-title-group">
+      <h1>⚡ 高二英文 U1 單字精熟挑戰</h1>
+      <p>三民普高英文乙版第三冊 Unit 1: City Planning: Building a Better Future (Words for Production)</p>
+    </div>
+    <div class="header-badges">
+      <div class="badge-pill btn-pill" onclick="openVocabModal()">📖 單字庫全覽 (<span id="total-words-count">26</span>字)</div>
+      <div class="badge-pill score">🏆 總分 <span id="header-total-score">0</span> / 100</div>
+      <div class="badge-pill" id="voice-support-badge">🎙️ 語音辨識就緒</div>
+    </div>
+  </header>
+
+  <!-- 主遊戲容器 -->
+  <div class="container">
+
+    <!-- 關卡進度導航 -->
+    <div class="level-nav-bar" id="level-nav-bar">
+      <div class="nav-step active" id="nav-step-1">1. 看中文唸英文</div>
+      <div class="nav-step" id="nav-step-2">2. 聽英文選中文</div>
+      <div class="nav-step" id="nav-step-3">3. 聽句子選意思</div>
+      <div class="nav-step" id="nav-step-4">4. 看中文拼寫</div>
+      <div class="nav-step" id="nav-step-5">5. 看句子唸英文</div>
+    </div>
+
+    <!-- 麥克風提示 -->
+    <div class="mic-warning" id="mic-tip-box" style="display:none;">
+      ⚠️ 瀏覽器語音辨識需使用麥克風權限。建議使用 <strong>Google Chrome</strong> 或 <strong>Microsoft Edge</strong> 獲得最佳辨識體驗！
+    </div>
+
+    <!-- 第一關：看中文唸英文 -->
+    <div id="level-1" class="page active">
+      <div class="level-header">
+        <h2>
+          <span>第一關：看中文唸英文 (共 10 題)</span>
+          <span class="pts-badge">每題 2 分 · 滿分 20</span>
+        </h2>
+        <p>請點擊「開始錄音」，唸出對應的英文單字。系統會即時辨識並給予愛心評分！</p>
+      </div>
+      <div id="q-container-1"></div>
+      <button class="next-btn" onclick="submitLevel(1)">✅ 提交第一關並進入下一關</button>
+    </div>
+
+    <!-- 第二關：聽英文選中文 -->
+    <div id="level-2" class="page">
+      <div class="level-header">
+        <h2>
+          <span>第二關：聽英文選中文 (共 10 題)</span>
+          <span class="pts-badge">每題 2 分 · 滿分 20</span>
+        </h2>
+        <p>點擊播放按鈕聆聽單字發音，然後從下拉選單中選擇正確的中文意思與詞性。</p>
+      </div>
+      <div id="q-container-2"></div>
+      <button class="next-btn" onclick="submitLevel(2)">✅ 提交第二關並進入下一關</button>
+    </div>
+
+    <!-- 第三關：聽句子選單字中文 -->
+    <div id="level-3" class="page">
+      <div class="level-header">
+        <h2>
+          <span>第三關：聽句子選單字中文 (共 5 題)</span>
+          <span class="pts-badge">每題 4 分 · 滿分 20</span>
+        </h2>
+        <p>點擊播放按鈕聆聽完整課文例句，並在語境中選出該句核心單字的中文意思。</p>
+      </div>
+      <div id="q-container-3"></div>
+      <button class="next-btn" onclick="submitLevel(3)">✅ 提交第三關並進入下一關</button>
+    </div>
+
+    <!-- 第四關：看中文拼寫單字 -->
+    <div id="level-4" class="page">
+      <div class="level-header">
+        <h2>
+          <span>第四關：看中文拼寫單字 (共 5 題)</span>
+          <span class="pts-badge">每題 4 分 · 滿分 20</span>
+        </h2>
+        <p>根據中文意思與詞性提示，在輸入框中拼出正確的英文單字（大小寫皆可，可按 Enter 切換）。</p>
+      </div>
+      <div id="q-container-4"></div>
+      <button class="next-btn" onclick="submitLevel(4)">✅ 提交第四關並進入下一關</button>
+    </div>
+
+    <!-- 第五關：看句子唸英文 -->
+    <div id="level-5" class="page">
+      <div class="level-header">
+        <h2>
+          <span>第五關：看句子唸英文 (共 5 題)</span>
+          <span class="pts-badge">每題 4 分 · 滿分 20</span>
+        </h2>
+        <p>唸出畫面上的英文句子。系統會根據句中單字吻合度給予愛心評分！可先點擊「範本朗讀」試聽。</p>
+      </div>
+      <div id="q-container-5"></div>
+      <button class="next-btn" onclick="submitLevel(5)">🎉 提交第五關並查看總成績</button>
+    </div>
+
+    <!-- 結算成績頁 -->
+    <div id="level-result" class="page">
+      <div class="result-card">
+        <div class="result-badge-icon" id="result-icon">🏆</div>
+        <div class="result-score-title">
+          闖關完成！總分 <span class="result-score-highlight" id="final-total-num">0</span> / 100
+        </div>
+        <p class="result-comment" id="final-comment-text">評語載入中...</p>
+
+        <div class="score-breakdown-grid" id="score-breakdown-container">
+          <!-- 動態注入各關成績 -->
+        </div>
+
+        <button class="restart-btn" onclick="restartGame()">🔄 重新挑戰一次</button>
+        <button class="restart-btn" onclick="openVocabModal()" style="background:#4F46E5;">📖 複習所有單字</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 單字庫全覽 Modal -->
+  <div class="modal-overlay" id="vocab-modal" onclick="closeVocabModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3>📖 本課核心單字全覽清單</h3>
+        <button class="modal-close" onclick="closeVocabModal()">✕ 關閉</button>
+      </div>
+      <div class="modal-body">
+        <table class="word-table">
+          <thead>
+            <tr>
+              <th style="width: 60px;">#</th>
+              <th>英文單字 / 音標</th>
+              <th>詞性與中文</th>
+              <th>課文例句</th>
+              <th style="width: 70px;">發音</th>
+            </tr>
+          </thead>
+          <tbody id="vocab-table-body">
+            <!-- 動態產生單字列 -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 單字資料庫注入
+    const wordsData = [
+  {
+    "en": "resident",
+    "zh": "(n. [C]) 居住者，居民",
+    "sentence": "Residents of big cities usually have to face the problems of dirty air, loud noises, and heavy traffic.",
+    "translation": "大城市的居民通常必須面對空氣髒亂、噪音吵雜以及交通擁擠的問題。"
+  },
+  {
+    "en": "facility",
+    "zh": "(n. [C]) 設施，設備",
+    "sentence": "The apartment building has many leisure facilities, such as a heated pool and a gym.",
+    "translation": "這棟公寓大樓有許多休閒設施，像是溫水游泳池和健身房。"
+  },
+  {
+    "en": "evolve",
+    "zh": "(vi.) 使逐步形成，發展",
+    "sentence": "The small business evolved into an international organization with offices all over the world.",
+    "translation": "這家小企業發展成為一個在世界各地都設有辦事處的國際組織。"
+  },
+  {
+    "en": "vision",
+    "zh": "(n. [C]) 願景，遠見",
+    "sentence": "Helen has a clear vision of her future, including what her job will be and when she will get married.",
+    "translation": "Helen對她的未來有明確的願景，包括她的工作是什麼以及何時結婚。"
+  },
+  {
+    "en": "concept",
+    "zh": "(n. [C]) 概念，觀念",
+    "sentence": "The concept of mindfulness can make a significant difference in people's lives.",
+    "translation": "正念的概念能為人們的生活帶來顯著的改變。"
+  },
+  {
+    "en": "access",
+    "zh": "(n. [U]) 途徑，使用權",
+    "sentence": "Thanks to the sports center, people now have access to the space and equipment they need to play the sports they love.",
+    "translation": "幸虧有了這座體育中心，人們現在有途徑使用他們熱愛運動所需的場地和設備。"
+  },
+  {
+    "en": "education",
+    "zh": "(n. [U]) 教育",
+    "sentence": "Education is our passport to the future, for tomorrow belongs only to the people who prepare for it today.",
+    "translation": "教育是我們通往未來的護照，因為明天只屬於今天為之做好準備的人。"
+  },
+  {
+    "en": "equal",
+    "zh": "(adj.) 平等的，同樣的",
+    "sentence": "Martin Luther King's major goal was to achieve equal rights for African Americans.",
+    "translation": "馬丁·路德·金恩的主要目標是為非裔美國人爭取平等的權利。"
+  },
+  {
+    "en": "admission",
+    "zh": "(n. [U]) 准許進入，入場許可",
+    "sentence": "In addition to taking a college entrance exam, there are various ways to apply for admission to a university in Taiwan today.",
+    "translation": "除了參加大學入學考試之外，現今在台灣申請大學入學還有多種途徑。"
+  },
+  {
+    "en": "consult",
+    "zh": "(vt.) 查閱，諮詢",
+    "sentence": "Before baking a cake, Lewis consulted a recipe book.",
+    "translation": "在烤蛋糕之前，Lewis查閱了一本食譜書。"
+  },
+  {
+    "en": "insight",
+    "zh": "(n. [U]) 了解，洞悉，洞察力",
+    "sentence": "The movie star's speech offered students a real insight into the nature of happiness.",
+    "translation": "這位影星的演講讓學生對幸福的本質有了真正的洞察與了解。"
+  },
+  {
+    "en": "accommodate",
+    "zh": "(vt.) 容納，提供膳宿",
+    "sentence": "The building beside the church was built to accommodate worshippers with a comfortable space for worship and meals.",
+    "translation": "教堂旁邊的建築物是為了容納信徒而建造，提供舒適的禮拜與用餐空間。"
+  },
+  {
+    "en": "distribute",
+    "zh": "(vt.) 分配，散布",
+    "sentence": "The company plans to distribute its products to as many consumers as possible.",
+    "translation": "該公司計劃將其產品分發給盡可能多的消費者。"
+  },
+  {
+    "en": "emergency",
+    "zh": "(n. [C]) 緊急狀況",
+    "sentence": "First responders are trained to handle situations calmly, even in emergencies.",
+    "translation": "現場急救人員受過訓練，即使在緊急狀況下也能冷靜應對。"
+  },
+  {
+    "en": "integrate",
+    "zh": "(vt.) 使融合，使成為一體",
+    "sentence": "The design of this building integrates technology with art.",
+    "translation": "這棟建築的設計將科技與藝術融合為一體。"
+  },
+  {
+    "en": "remotely",
+    "zh": "(adv.) 從遠處地，遠端地",
+    "sentence": "Many household appliances, such as washing machines and air conditioners, can be remotely operated over the Internet.",
+    "translation": "許多家電用品（例如洗衣機和冷氣機）都可以透過網際網路遠端操作。"
+  },
+  {
+    "en": "route",
+    "zh": "(n. [C]) 路線",
+    "sentence": "We decided to take a relaxing route through the mountains, where we could enjoy the breathtaking views.",
+    "translation": "我們決定走一條穿過山區的輕鬆路線，在那裡我們可以欣賞令人驚嘆的景色。"
+  },
+  {
+    "en": "warn",
+    "zh": "(vt.) 警告，告誡",
+    "sentence": "Cigarette companies are required to include information on their products that warns consumers about the risks of smoking.",
+    "translation": "香煙公司被要求在產品上包含警告消費者吸煙風險的資訊。"
+  },
+  {
+    "en": "adjust",
+    "zh": "(vt.) 調整，調節",
+    "sentence": "I need to adjust the chair height to make it more comfortable for me.",
+    "translation": "我需要調整椅子的高度，讓自己坐得更舒適。"
+  },
+  {
+    "en": "enhance",
+    "zh": "(vt.) 提高，增強",
+    "sentence": "Through play, children learn social skills and enhance their relationships with other children.",
+    "translation": "透過遊戲，孩子們學習社交技巧並增強與其他孩子的關係。"
+  },
+  {
+    "en": "establish",
+    "zh": "(vt.) 建立，創辦",
+    "sentence": "Flora wanted to establish her own business, so she carefully planned and carried out her ideas to create a successful company.",
+    "translation": "Flora想創立自己的事業，因此她周詳規劃並實踐想法以建立一家成功的公司。"
+  },
+  {
+    "en": "summary",
+    "zh": "(n. [C]) 概要，摘要",
+    "sentence": "I wrote a brief summary to highlight the key points of the lengthy document.",
+    "translation": "我寫了一份簡短的概要，以突顯該冗長文件的重點。"
+  },
+  {
+    "en": "crucial",
+    "zh": "(adj.) 關鍵的，決定性的",
+    "sentence": "Getting a good night's sleep before the exam is crucial to doing well.",
+    "translation": "考試前一晚有良好的睡眠對於取得好成績至關重要。"
+  },
+  {
+    "en": "vital",
+    "zh": "(adj.) 極重要的，不可缺少的",
+    "sentence": "The Internet plays a vital role in modern society as people depend on it for almost everything.",
+    "translation": "網際網路在現代社會中扮演著極重要的角色，因為人們幾乎所有事情都依賴它。"
+  },
+  {
+    "en": "aid",
+    "zh": "(n. [U]) 救助，援助",
+    "sentence": "The Red Cross provides aid to disaster victims by offering food, housing, and medical care.",
+    "translation": "紅十字會透過提供食物、住所和醫療照護，向災民提供援助。"
+  },
+  {
+    "en": "overestimate",
+    "zh": "(vt.) 高估",
+    "sentence": "We shouldn't overestimate the impact of this small change on the overall project.",
+    "translation": "我們不應高估這個微小改變對整個專案的影響。"
+  }
+];
+
+    // Web Audio 音效產生器 (零相依，乾淨合成音)
+    const AudioEngine = {
+      ctx: null,
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+      },
+      playTone(freq, type, duration, delay = 0) {
+        try {
+          this.init();
+          if (!this.ctx) return;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime + delay);
+          gain.gain.setValueAtTime(0.12, this.ctx.currentTime + delay);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + delay + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(this.ctx.currentTime + delay);
+          osc.stop(this.ctx.currentTime + delay + duration);
+        } catch(e) {}
+      },
+      correct() {
+        this.playTone(523.25, 'sine', 0.1, 0);      // C5
+        this.playTone(659.25, 'sine', 0.12, 0.08);  // E5
+        this.playTone(783.99, 'sine', 0.2, 0.16);   // G5
+      },
+      wrong() {
+        this.playTone(220, 'sawtooth', 0.15, 0);
+        this.playTone(180, 'sawtooth', 0.25, 0.12);
+      },
+      fanfare() {
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+          this.playTone(freq, 'triangle', 0.25, i * 0.12);
+        });
+      }
+    };
+
+    // 洗牌輔助函數
+    function shuffle(array) {
+      let copy = [...array];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    // 分數狀態與題目題庫記憶
+    let scores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    let currentQuestions = { 1: [], 2: [], 3: [], 4: [], 5: [] };
+
+    // Web Speech API: 語音辨識 (STT)
+    let recognition = null;
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRec();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+      recognition.continuous = false;
+    } else {
+      document.getElementById('mic-tip-box').style.display = 'block';
+      const badge = document.getElementById('voice-support-badge');
+      if (badge) {
+        badge.innerText = '⚠️ 不支援語音辨識 (建議用 Chrome)';
+        badge.style.color = '#DC2626';
+        badge.style.background = '#FEE2E2';
+      }
+    }
+
+    // Web Speech API: 語音合成 (TTS)
+    function speak(text) {
+      AudioEngine.init();
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.92;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function speakLevelWord(lvl, idx) {
+      const item = currentQuestions[lvl][idx];
+      if (item && item.en) speak(item.en);
+    }
+
+    function speakLevelSentence(lvl, idx) {
+      const item = currentQuestions[lvl][idx];
+      if (item && item.sentence) speak(item.sentence);
+    }
+
+    // 選單選項產生器
+    function getOptionsHTML(correctZh) {
+      let allZh = wordsData.map(w => w.zh || w.chinese);
+      let distractors = shuffle(allZh.filter(z => z !== correctZh)).slice(0, 14);
+      let options = shuffle([correctZh, ...distractors]);
+      
+      let html = `<option value="">請選擇正確的中文意思與詞性...</option>`;
+      options.forEach(opt => {
+        html += `<option value="${opt}">${opt}</option>`;
+      });
+      return html;
+    }
+
+    // 語音錄音與辨識邏輯
+    let currentInputId = null;
+    let currentTargetText = "";
+    let isRecording = false;
+
+    function toggleRecord(btn, inputId, targetText) {
+      AudioEngine.init();
+      if (!recognition) {
+        alert("您的瀏覽器暫不支援 Web Speech 語音辨識，建議使用 Google Chrome 或 Edge 瀏覽器開啟！");
+        return;
+      }
+
+      if (isRecording) {
+        recognition.stop();
+        btn.innerHTML = "🎙️ 開始錄音";
+        btn.classList.remove('recording');
+        isRecording = false;
+      } else {
+        currentInputId = inputId;
+        currentTargetText = targetText.toLowerCase();
+        
+        try {
+          recognition.start();
+          btn.innerHTML = "⏹️ 結束錄音";
+          btn.classList.add('recording');
+          isRecording = true;
+
+          const statusEl = document.getElementById(inputId);
+          if (statusEl) {
+            statusEl.innerText = "聆聽中...請清楚朗讀";
+            statusEl.className = "speech-status active-listen";
+          }
+
+          const heartsId = inputId.replace('-ans-', '-hearts-');
+          const heartsEl = document.getElementById(heartsId);
+          if (heartsEl) heartsEl.innerText = "";
+        } catch(err) {
+          console.warn("Recognition start error:", err);
+        }
+      }
+    }
+
+    function toggleRecordByIndex(btn, lvl, idx) {
+      const item = currentQuestions[lvl][idx];
+      if (!item) return;
+      const target = (lvl === 1) ? item.en : (item.sentence || item.en);
+      toggleRecord(btn, `l${lvl}-ans-${idx}`, target);
+    }
+
+    if (recognition) {
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript.toLowerCase();
+        const statusEl = document.getElementById(currentInputId);
+        if (statusEl) {
+          statusEl.innerText = `辨識: "${transcript}"`;
+          statusEl.dataset.val = transcript;
+          statusEl.className = "speech-status";
+        }
+
+        let heartsCount = 0;
+        let targetWords = currentTargetText.replace(/[^a-z\s]/g, '').split(/\s+/).filter(w => w);
+        let transcriptWords = transcript.replace(/[^a-z\s]/g, '').split(/\s+/).filter(w => w);
+
+        // 單字比對 (第一關)
+        if (targetWords.length === 1) {
+          if (transcriptWords.includes(targetWords[0])) {
+            heartsCount = 5;
+            AudioEngine.correct();
+          } else {
+            heartsCount = 1;
+            AudioEngine.wrong();
+          }
+        } 
+        // 句子比對 (第五關)
+        else {
+          let matchCount = 0;
+          targetWords.forEach(w => {
+            if (transcriptWords.includes(w)) matchCount++;
+          });
+          let ratio = targetWords.length > 0 ? (matchCount / targetWords.length) : 0;
+          if (ratio >= 0.8) heartsCount = 5;
+          else if (ratio >= 0.6) heartsCount = 4;
+          else if (ratio >= 0.4) heartsCount = 3;
+          else if (ratio >= 0.2) heartsCount = 2;
+          else heartsCount = 1;
+
+          if (heartsCount >= 4) AudioEngine.correct();
+          else AudioEngine.wrong();
+        }
+
+        let heartsStr = '❤️'.repeat(heartsCount) + '🤍'.repeat(5 - heartsCount);
+        let heartsId = currentInputId.replace('-ans-', '-hearts-');
+        let heartsEl = document.getElementById(heartsId);
+        if (heartsEl) {
+          heartsEl.innerText = heartsStr;
+        }
+      };
+
+      recognition.onerror = function(event) {
+        console.warn("Speech error:", event.error);
+        if (isRecording) {
+          isRecording = false;
+          document.querySelectorAll('.record-btn').forEach(b => {
+            b.innerHTML = "🎙️ 開始錄音";
+            b.classList.remove('recording');
+          });
+        }
+      };
+
+      recognition.onend = function() {
+        if (isRecording) {
+          isRecording = false;
+          document.querySelectorAll('.record-btn').forEach(b => {
+            b.innerHTML = "🎙️ 開始錄音";
+            b.classList.remove('recording');
+          });
+        }
+      };
+    }
+
+    // 初始化所有關卡題目
+    function initLevels() {
+      // 確保單字屬性統一
+      const normalizedWords = wordsData.map(w => ({
+        en: (w.en || w.word || "").trim(),
+        zh: (w.zh || w.chinese || "").trim(),
+        sentence: (w.sentence || "").trim(),
+        translation: (w.translation || "").trim(),
+        pos: (w.pos || "").trim(),
+        phonetic: (w.phonetic || "").trim()
+      })).filter(w => w.en && w.zh);
+
+      const countEl = document.getElementById('total-words-count');
+      if (countEl) countEl.innerText = normalizedWords.length;
+
+      // 1. 第一關：看中文唸英文 (10 題)
+      let l1Container = document.getElementById('q-container-1');
+      l1Container.innerHTML = "";
+      let l1Words = [];
+      while(l1Words.length < 10) {
+        l1Words = l1Words.concat(shuffle(normalizedWords));
+      }
+      currentQuestions[1] = l1Words.slice(0, 10);
+      currentQuestions[1].forEach((w, idx) => {
+        l1Container.innerHTML += `
+          <div class="question-card" data-answer="${w.en}">
+            <div class="q-index">第 ${idx + 1} 題</div>
+            <div class="q-prompt">中文提示：<span class="highlight">${w.zh}</span></div>
+            <div class="action-row">
+              <button class="record-btn" onclick="toggleRecordByIndex(this, 1, ${idx})">🎙️ 開始錄音</button>
+              <span class="speech-status" id="l1-ans-${idx}" data-val="">尚未錄音</span>
+              <span class="hearts" id="l1-hearts-${idx}"></span>
+            </div>
+          </div>`;
+      });
+
+      // 2. 第二關：聽英文選中文 (10 題)
+      let l2Container = document.getElementById('q-container-2');
+      l2Container.innerHTML = "";
+      let l2Words = [];
+      while(l2Words.length < 10) {
+        l2Words = l2Words.concat(shuffle(normalizedWords));
+      }
+      currentQuestions[2] = l2Words.slice(0, 10);
+      currentQuestions[2].forEach((w, idx) => {
+        l2Container.innerHTML += `
+          <div class="question-card" data-answer="${w.zh}">
+            <div class="q-index">第 ${idx + 1} 題</div>
+            <div class="q-prompt">點擊聽音並選擇中文詞義：</div>
+            <div class="action-row">
+              <button class="play-btn" onclick="speakLevelWord(2, ${idx})">🔊 播放單字</button>
+              <select id="l2-sel-${idx}">${getOptionsHTML(w.zh)}</select>
+            </div>
+          </div>`;
+      });
+
+      // 3. 第三關：聽句子選單字中文 (5 題)
+      let l3Container = document.getElementById('q-container-3');
+      l3Container.innerHTML = "";
+      let sentencePool = normalizedWords.filter(w => w.sentence && w.sentence.length > 5);
+      if (sentencePool.length === 0) sentencePool = normalizedWords;
+      let l3Words = [];
+      while(l3Words.length < 5) {
+        l3Words = l3Words.concat(shuffle(sentencePool));
+      }
+      currentQuestions[3] = l3Words.slice(0, 5);
+      currentQuestions[3].forEach((w, idx) => {
+        l3Container.innerHTML += `
+          <div class="question-card" data-answer="${w.zh}">
+            <div class="q-index">第 ${idx + 1} 題</div>
+            <div class="q-prompt">聆聽例句，選出核心單字意思：</div>
+            <div class="action-row">
+              <button class="play-btn" onclick="speakLevelSentence(3, ${idx})">🔊 播放句子</button>
+              <select id="l3-sel-${idx}">${getOptionsHTML(w.zh)}</select>
+            </div>
+          </div>`;
+      });
+
+      // 4. 第四關：看中文拼寫單字 (5 題)
+      let l4Container = document.getElementById('q-container-4');
+      l4Container.innerHTML = "";
+      let l4Words = [];
+      while(l4Words.length < 5) {
+        l4Words = l4Words.concat(shuffle(normalizedWords));
+      }
+      currentQuestions[4] = l4Words.slice(0, 5);
+      currentQuestions[4].forEach((w, idx) => {
+        l4Container.innerHTML += `
+          <div class="question-card" data-answer="${w.en}">
+            <div class="q-index">第 ${idx + 1} 題</div>
+            <div class="q-prompt">請拼出英文：<span class="highlight">${w.zh}</span></div>
+            <div class="action-row">
+              <input type="text" id="l4-txt-${idx}" placeholder="請輸入英文單字..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onkeydown="handleEnterKey(event, ${idx})">
+            </div>
+          </div>`;
+      });
+
+      // 5. 第五關：看句子唸英文 (5 題)
+      let l5Container = document.getElementById('q-container-5');
+      l5Container.innerHTML = "";
+      let l5Words = [];
+      while(l5Words.length < 5) {
+        l5Words = l5Words.concat(shuffle(sentencePool));
+      }
+      currentQuestions[5] = l5Words.slice(0, 5);
+      currentQuestions[5].forEach((w, idx) => {
+        let sent = w.sentence || `Consistent practice is essential for mastering ${w.en}.`;
+        let transHint = w.translation ? `<div style="font-size:13px; color:#64748B; margin-top:4px;">中譯提示：${w.translation}</div>` : '';
+        l5Container.innerHTML += `
+          <div class="question-card" data-answer="${sent}">
+            <div class="q-index">第 ${idx + 1} 題</div>
+            <div class="q-prompt">請唸出例句：<br><span class="highlight">${sent}</span>${transHint}</div>
+            <div class="action-row">
+              <button class="record-btn" onclick="toggleRecordByIndex(this, 5, ${idx})">🎙️ 開始錄音</button>
+              <button class="play-btn" onclick="speakLevelSentence(5, ${idx})" style="background:#6366F1;">🔊 範本朗讀</button>
+              <span class="speech-status" id="l5-ans-${idx}" data-val="">尚未錄音</span>
+              <span class="hearts" id="l5-hearts-${idx}"></span>
+            </div>
+          </div>`;
+      });
+
+      // 填充 Modal 單字全覽表
+      const tbody = document.getElementById('vocab-table-body');
+      if (tbody) {
+        tbody.innerHTML = "";
+        normalizedWords.forEach((w, idx) => {
+          tbody.innerHTML += `
+            <tr>
+              <td><strong>${idx + 1}</strong></td>
+              <td><strong>${w.en}</strong><br><small style="color:#64748B;">${w.phonetic}</small></td>
+              <td><span style="color:#4F46E5; font-weight:700;">${w.pos}</span> ${w.zh}</td>
+              <td><div style="font-size:13px;">${w.sentence}</div><div style="font-size:12px; color:#64748B;">${w.translation}</div></td>
+              <td><button class="play-btn" style="padding:4px 8px; font-size:12px;" onclick="speak('${w.en.replace(/'/g, "\\'")}')">🔊</button></td>
+            </tr>
+          `;
+        });
+      }
+    }
+
+    function handleEnterKey(e, idx) {
+      if (e.key === 'Enter') {
+        const nextInput = document.getElementById(`l4-txt-${idx + 1}`);
+        if (nextInput) nextInput.focus();
+        else submitLevel(4);
+      }
+    }
+
+    // 關卡提交與計分
+    function submitLevel(lvl) {
+      AudioEngine.init();
+      let earned = 0;
+
+      if (lvl === 1) {
+        document.querySelectorAll('#q-container-1 .question-card').forEach(card => {
+          let ans = card.getAttribute('data-answer').toLowerCase().trim();
+          let val = (card.querySelector('.speech-status').dataset.val || "").toLowerCase().trim();
+          if (val.includes(ans)) earned += 2;
+        });
+      } else if (lvl === 2) {
+        document.querySelectorAll('#q-container-2 .question-card').forEach(card => {
+          let ans = card.getAttribute('data-answer');
+          let val = card.querySelector('select').value;
+          if (ans && val && ans === val) earned += 2;
+        });
+      } else if (lvl === 3) {
+        document.querySelectorAll('#q-container-3 .question-card').forEach(card => {
+          let ans = card.getAttribute('data-answer');
+          let val = card.querySelector('select').value;
+          if (ans && val && ans === val) earned += 4;
+        });
+      } else if (lvl === 4) {
+        document.querySelectorAll('#q-container-4 .question-card').forEach(card => {
+          let ans = card.getAttribute('data-answer').toLowerCase().trim();
+          let val = card.querySelector('input').value.toLowerCase().trim();
+          if (ans && val && ans === val) earned += 4;
+        });
+      } else if (lvl === 5) {
+        document.querySelectorAll('#q-container-5 .question-card').forEach(card => {
+          let heartsText = card.querySelector('.hearts').innerText;
+          let heartCount = (heartsText.match(/❤️/g) || []).length;
+          if (heartCount >= 4) earned += 4;
+          else if (heartCount === 3) earned += 2;
+        });
+      }
+
+      scores[lvl] = earned;
+      updateHeaderScore();
+
+      // 更新進度導航標籤
+      const currentNav = document.getElementById(`nav-step-${lvl}`);
+      if (currentNav) {
+        currentNav.classList.remove('active');
+        currentNav.classList.add('completed');
+      }
+
+      // 切換頁面
+      document.getElementById(`level-${lvl}`).classList.remove('active');
+      if (lvl < 5) {
+        const nextNav = document.getElementById(`nav-step-${lvl + 1}`);
+        if (nextNav) nextNav.classList.add('active');
+        document.getElementById(`level-${lvl + 1}`).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        AudioEngine.correct();
+      } else {
+        showFinalResult();
+      }
+    }
+
+    function updateHeaderScore() {
+      let total = Object.values(scores).reduce((a, b) => a + b, 0);
+      document.getElementById('header-total-score').innerText = total;
+    }
+
+    // 顯示結算畫面
+    function showFinalResult() {
+      AudioEngine.fanfare();
+      document.getElementById('level-nav-bar').style.display = 'none';
+      document.getElementById('level-result').classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      let total = Object.values(scores).reduce((a, b) => a + b, 0);
+      document.getElementById('final-total-num').innerText = total;
+
+      // 評語與獎章
+      let icon = "🏆";
+      let comment = "";
+      if (total >= 90) {
+        icon = "👑";
+        comment = "太神了！S級單字大師！聽、說、讀、寫全面精熟，學測英文頂標非你莫屬！";
+      } else if (total >= 75) {
+        icon = "🌟";
+        comment = "表現優異！A級精熟高手！大部分單字均已掌握，再多練習幾次即可滿分！";
+      } else if (total >= 60) {
+        icon = "👍";
+        comment = "達標合格！B級進步達人！建議針對拼寫與口說部分再加強複習！";
+      } else {
+        icon = "💪";
+        comment = "再接再厲！建議重新聆聽例句並練習發音，多練幾次一定能大幅進步！";
+      }
+
+      document.getElementById('result-icon').innerText = icon;
+      document.getElementById('final-comment-text').innerText = comment;
+
+      // 產生各關細項卡片
+      const levelNames = [
+        "",
+        "第一關：看中文唸英文",
+        "第二關：聽英文選中文",
+        "第三關：聽句子選單字中文",
+        "第四關：看中文拼寫單字",
+        "第五關：看句子唸英文"
+      ];
+
+      let gridHtml = "";
+      for (let i = 1; i <= 5; i++) {
+        let earned = scores[i];
+        gridHtml += `
+          <div class="score-box">
+            <div class="score-box-title">${levelNames[i]}</div>
+            <div class="score-box-num">${earned} <span style="font-size:14px; color:#64748B;">/ 20 分</span></div>
+          </div>
+        `;
+      }
+      document.getElementById('score-breakdown-container').innerHTML = gridHtml;
+    }
+
+    // 重新遊玩
+    function restartGame() {
+      scores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+      updateHeaderScore();
+      document.getElementById('level-nav-bar').style.display = 'flex';
+      for (let i = 1; i <= 5; i++) {
+        const nav = document.getElementById(`nav-step-${i}`);
+        if (nav) nav.className = (i === 1) ? 'nav-step active' : 'nav-step';
+        const page = document.getElementById(`level-${i}`);
+        if (page) page.classList.remove('active');
+      }
+      document.getElementById('level-result').classList.remove('active');
+      document.getElementById('level-1').classList.add('active');
+      initLevels();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Modal 開關
+    function openVocabModal() {
+      document.getElementById('vocab-modal').classList.add('active');
+    }
+    function closeVocabModal(e) {
+      if (!e || e.target.id === 'vocab-modal' || e.target.classList.contains('modal-close')) {
+        document.getElementById('vocab-modal').classList.remove('active');
+      }
+    }
+
+    window.onload = initLevels;
+  </script>
+</body>
+</html>
